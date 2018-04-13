@@ -1,15 +1,15 @@
 ---
-title: "PowerShell Profile & Functions"
+title: PowerShell Profile & Functions
 author: ~
 date: '2018-04-12'
-slug: opelr-r-package
-categories: [R]
+slug: powershell-profile
+categories: [PowerShell]
 # tags: []
 output:
   blogdown::html_page:
-    toc: true
+    # toc: true
+    # toc_depth: 1
     number_sections: true
-    toc_depth: 1
 ---
 
 Until starting my current position, I had been a pretty strict Mac OS user. As one can expect from a job in the public sector however, I quickly had to face the reality of full-time Windows use, which I had successfully avoided since my days as a high school student with a laptop that barely ran Vista. While initially hesitant, I’ve become gradually more accustomed to and fond of the Windows environment – even running Windows 10 as the primary operating system on my desktop at home.
@@ -20,7 +20,7 @@ Something I did not find out about until a few months in to my PowerShell use, b
 
 [How-To Geek has a good article](https://www.howtogeek.com/50236/customizing-your-powershell-profile/) that covers how to set up a basic PowerShell profile, which I recommend reading before moving forward. All the code below can go in your PS Profile in any order, but I'll present it in the order that makes the most sense to me.
 
-## General Terminal Setup
+# General Terminal Setup
 
 I tend to prefer light (or colorful!) text on dark backgrounds in all the IDEs I use, and PowerShell is no exception. Here, we'll set our terminal colors, change the width of the terminal to 80 characters, and give our window a more fun title.
 
@@ -37,7 +37,7 @@ $size.width=80
 $size.height=25
 ```
 
-## PowerShell Path
+# PowerShell Path
 
 While most Windows-based developers are probably familiar with adding variables to their system PATH, there are some scripts I've written/downloaded that I only want PowerShell, not the whole computer, to have easy access to. As such, we'll append our PowerShell environment's *Path* with the directories where our scripts reside. A few examples are below:
 
@@ -49,7 +49,7 @@ $env:Path += ";C:\Python27\Scripts\Personal"
 
 Now any shell-specific Python or PowerShell scripts I have can be called in the terminal!
 
-## Aliases
+# Aliases
 
 PowerShell [already utilizes a lot of aliases](https://ss64.com/ps/) to make the transition from bash simpler -- familiar commands like `ls`, `mkdir`, and `cd` are available out of the box, and much easier to remember than their PowerShell names even for users who are unfamiliar with bash (for reference, those names are `Get-ChildItem`, `New-Item -Type folder`, and `Set-Location`). Within our PowerShell Profile, we can also make aliases for either native PowerShell commands, or, as I've done, to open programs via the terminal. Some programs, like VSCode (`code`), have existing aliases you can use to call them from PowerShell, but here are some that I frequently use.
 
@@ -60,13 +60,13 @@ PowerShell [already utilizes a lot of aliases](https://ss64.com/ps/) to make the
 	new-item alias:python-27 -value "C:\Python27\python.exe"
 ```
 
-## Functions
+# Functions
 
 The real benefit of having a PowerShell profile is being able to write down all the brilliant functions you've written (or copied from Stack Overflow) to use months down the road! 
 
-### General Use {.tabset .tabset-pills .tabset-fade}
+## General Use {.tabset .tabset-pills .tabset-fade}
 
-#### Edit-Profile
+### Edit-Profile
 
 Opens your PowerShell Profile with NotePad++ (assumes that alias is defined as above).
 
@@ -78,7 +78,7 @@ Function Edit-Profile
 }
 ```
 
-#### Shortcut to Directory
+### Shortcut to Directory
 
 Changes directory to a specified location, pretty simple.  
 
@@ -90,7 +90,7 @@ Function projects
 }
 ```
 
-#### Change Prompt
+### Change Prompt
 
 I can't stand when the text-prompt shows the entire filepath of the directory I'm in, so this function, which is automatically called on startup an never needs to be touched again, just shows the name of the directory where I currently reside -- so much cleaner.
 
@@ -104,7 +104,7 @@ Function prompt
 ```
 
 
-#### Get-FilesByType
+### Get-FilesByType
 
 This function lists the total number and size (in MB) of all files with the same extension in a directory and all child directories. Equivalent to a MySQL `SELECT Extension, COUNT(Extension), SUM(Size) FROM ls GROUP BY Extension`.
 
@@ -119,10 +119,9 @@ Function Get-FilesByType
 }
 ```
 
-#### List-Functions
+### List-Functions
 
 Finally, this is an alias that returns a list of all the custom functions you've defined!
-
 
 ```powershell
 Function List-Functions

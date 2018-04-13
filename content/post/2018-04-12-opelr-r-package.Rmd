@@ -7,9 +7,9 @@ categories: [R]
 # tags: []
 output:
   blogdown::html_page:
-    toc: true
+    # toc: true
+    # toc_depth: 1
     number_sections: true
-    toc_depth: 1
 ---
 
 Following the advice of the wonderful [Hadley Wickham](http://r-pkgs.had.co.nz/), [Hillary Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/), and [Karl Broman](http://kbroman.org/pkg_primer/), I took the plunge last year and drafted the first version of my very own R package. Conveniently, my name fits the motif of R-related puns (useRs, etc.), and so [opelR](https://github.com/opelr/opelR) was born!

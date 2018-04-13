@@ -3,18 +3,23 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/posts/opelr-r-package/</loc>
+    <loc>/post/test/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/powershell-profile/</loc>
     <lastmod>2018-04-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/posts/opelr-r-package/</loc>
+    <loc>/post/opelr-r-package/</loc>
     <lastmod>2018-04-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-04-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -33,7 +38,13 @@
   </url>
   
   <url>
-    <loc>/posts/</loc>
+    <loc>/post/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/powershell/</loc>
     <lastmod>2018-04-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

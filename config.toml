@@ -27,8 +27,8 @@ theme = "hyde-hyde"
     email = "ryan.a.opel@gmail.com"
     github = "opelr"
     linkedin = "ryanopel"
-    twitter = "_opelr"
     
+    ## twitter = "_opelr"
     ## instagram = "<username>"
     ## xing = "<username>"
     ## facebook = "<username>"
@@ -36,12 +36,17 @@ theme = "hyde-hyde"
 
 ## Main Menu
 [[menu.main]]
-    name = "Posts"
+    name = "Home"
     weight = 100
-    identifier = "posts"
-    url = "/posts/"
+    # identifier = ""
+    url = "/"
+[[menu.main]]
+    name = "Posts"
+    weight = 200
+    identifier = "post"
+    url = "/post/"
 [[menu.main]]
     name = "About"
     identifier = "about/"
-    weight = 200
+    weight = 300
     url = "/about/me/"
