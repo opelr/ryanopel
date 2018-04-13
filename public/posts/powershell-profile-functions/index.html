@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" class="wf-firasans-n4-active wf-active">
+	<head>
+    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Enable responsiveness on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    <meta name="generator" content="Hugo 0.38.2" />
+    
+    <title>PowerShell Profile &amp; Functions &middot; </title>
+    <meta content="PowerShell Profile &amp; Functions - " property="og:title">
+    <meta content=" - " property="og:description">
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i|Roboto+Mono:300,300i,400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="/css/print.css" media="print">
+    <link rel="stylesheet" href="/css/poole.css">
+    <link rel="stylesheet" href="/css/hyde.css">
+    <!-- Font-Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <!-- highlight.js-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <!-- Customised CSS -->
+    <link rel="stylesheet" href="/css/custom.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+	</head>
+    <body>
+        <div class="sidebar">
+	<div class="container text-center sidebar-sticky">
+		<div class="sidebar-about text-center">
+			<a href="/"><h1 class="brand"></h1></a>
+			 <img src="/img/hugo.png" alt="Author Image" class="img-circle headshot center"> 
+			<p class="lead">
+				 Ryan Opel 
+			</p>
+		</div>
+		
+<div>
+	<ul class="sidebar-nav">
+		
+		
+				<li>
+					<a href="/posts/"> <span>Posts</span></a>
+				</li>
+				<li>
+					<a href="/about/me/"> <span>About</span></a>
+				</li>
+		</li>
+	</ul>
+</div>
+
+        <p>
+		<section class="row text-center">
+	
+	<a href="https://twitter.com/_opelr"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://github.com/opelr"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	&nbsp;<a href="https://linkedin.com/in/ryanopel"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	&nbsp;<a href="mailto:ryan.a.opel@gmail.com"><i class="fas fa-at fa-lg" aria-hidden="true"></i></a>
+	
+</section>
+
+        </p>
+		<p class="copyright">&copy; 2018 Ryan Opel.
+        <a href="https://creativecommons.org/licenses/by/4.0">Some Rights Reserved</a>.<br/>Built with <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+        </p>
+	</div>
+	<div>
+	</div>
+</div>
+
+        <div class="content container">
+            <div class="post">
+  <h1>PowerShell Profile &amp; Functions</h1>
+  
+  <div class="col-sm-12 col-md-12">
+    <span class="text-left post-date meta">
+            
+       
+        <i class="fas fa-calendar-alt"></i> 2018-04-12
+      
+      
+        
+        
+            in
+            
+            
+                <a class="meta" href="/categories/powershell">POWERSHELL</a>
+                
+            
+        
+      
+      
+      
+      <br/>
+      <i class="fas fa-clock"></i> 4 min read 
+      </span>  
+  </div>    
+  
+  
+
+<p>Until starting my current position, I had been a pretty strict Mac OS user. As one can expect from a job in the public sector however, I quickly had to face the reality of full-time Windows use, which I had successfully avoided since my days as a high school student with a laptop that barely ran Vista. While initially hesitant, I&rsquo;ve become gradually more accustomed to and fond of the Windows environment &ndash; even running Windows 10 as the primary operating system on my desktop at home.</p>
+
+<p>My Windows transition also led me to become familiar with PowerShell. While a bit more obtuse that Unix&rsquo;s bash shell, PowerShell has grown on me over the past few years and has become an integral part of my pipeline at work and at home.</p>
+
+<p>Something I did not find out about until a few months in to my PowerShell use, but which has ultimately become irreplaceable, is the PowerShell Profile. This Profile allows user to save functions, aliases, and general shell settings between sessions, and automatically loads when the terminal starts.</p>
+
+<p><a href="https://www.howtogeek.com/50236/customizing-your-powershell-profile/">How-To Geek has a good article</a> that covers how to set up a basic PowerShell profile, which I recommend reading before moving forward. All the code below can go in your PS Profile in any order, but I&rsquo;ll present it in the order that makes the most sense to me.</p>
+
+<h2 id="general-terminal-setup">General Terminal Setup</h2>
+
+<p>I tend to prefer light (or colorful!) text on dark backgrounds in all the IDEs I use, and PowerShell is no exception. Here, we&rsquo;ll set our terminal colors, change the width of the terminal to 80 characters, and give our window a more fun title.</p>
+
+<pre><code class="language-powershell">$host.ui.RawUI.WindowTitle = &quot;Beep Boop Terminal&quot;
+
+$Shell = $Host.UI.RawUI
+$shell.BackgroundColor = &quot;Black&quot;
+$shell.ForegroundColor = &quot;White&quot;
+
+$size = $Shell.WindowSize
+$size.width=80
+$size.height=25
+</code></pre>
+
+<h2 id="powershell-path">PowerShell Path</h2>
+
+<p>While most Windows-based developers are probably familiar with adding variables to their system PATH, there are some scripts I&rsquo;ve written/downloaded that I only want PowerShell, not the whole computer, to have easy access to. As such, we&rsquo;ll append our PowerShell environment&rsquo;s <em>Path</em> with the directories where our scripts reside. A few examples are below:</p>
+
+<pre><code class="language-powershell">$env:Path += &quot;;C:\Users\Ry\Documents\WindowsPowerShell&quot;
+$env:Path += &quot;;C:\Python27\Scripts\Personal&quot;
+</code></pre>
+
+<p>Now any shell-specific Python or PowerShell scripts I have can be called in the terminal!</p>
+
+<h2 id="aliases">Aliases</h2>
+
+<p>PowerShell <a href="https://ss64.com/ps/">already utilizes a lot of aliases</a> to make the transition from bash simpler &ndash; familiar commands like <code>ls</code>, <code>mkdir</code>, and <code>cd</code> are available out of the box, and much easier to remember than their PowerShell names even for users who are unfamiliar with bash (for reference, those names are <code>Get-ChildItem</code>, <code>New-Item -Type folder</code>, and <code>Set-Location</code>). Within our PowerShell Profile, we can also make aliases for either native PowerShell commands, or, as I&rsquo;ve done, to open programs via the terminal. Some programs, like VSCode (<code>code</code>), have existing aliases you can use to call them from PowerShell, but here are some that I frequently use.</p>
+
+<pre><code class="language-powershell">	new-item alias:np -value &quot;C:\Program Files (x86)\Notepad++\notepad++.exe&quot;
+	new-item alias:vim -value &quot;C:\Program Files (x86)\Vim\vim80\vim.exe&quot;
+	new-item alias:python-27 -value &quot;C:\Python27\python.exe&quot;
+</code></pre>
+
+<h2 id="functions">Functions</h2>
+
+<p>The real benefit of having a PowerShell profile is being able to write down all the brilliant functions you&rsquo;ve written (or copied from Stack Overflow) to use months down the road!</p>
+
+<h3 id="general-use">General Use</h3>
+
+<h4 id="edit-profile">Edit-Profile</h4>
+
+<p>Opens your PowerShell Profile with NotePad++ (assumes that alias is defined as above).</p>
+
+<pre><code class="language-powershell">Function Edit-Profile
+{
+  np $profile
+}
+</code></pre>
+
+<h4 id="shortcut-to-directory">Shortcut to Directory</h4>
+
+<p>Changes directory to a specified location, pretty simple.</p>
+
+<pre><code class="language-powershell">Function projects
+{
+  cd D:\data\lab\code\
+}
+</code></pre>
+
+<h4 id="change-prompt">Change Prompt</h4>
+
+<p>I can&rsquo;t stand when the text-prompt shows the entire filepath of the directory I&rsquo;m in, so this function, which is automatically called on startup an never needs to be touched again, just shows the name of the directory where I currently reside &ndash; so much cleaner.</p>
+
+<pre><code class="language-powershell">Function prompt
+{
+  $p = Split-Path -leaf -path (Get-Location)
+  &quot;$p&gt; &quot;
+}
+</code></pre>
+
+<h4 id="get-filesbytype">Get-FilesByType</h4>
+
+<p>This function lists the total number and size (in MB) of all files with the same extension in a directory and all child directories. Equivalent to a MySQL <code>SELECT Extension, COUNT(Extension), SUM(Size) FROM ls GROUP BY Extension</code>.</p>
+
+<pre><code class="language-powershell">Function Get-FilesByType
+{
+	Get-ChildItem -Path $directory -Recurse |
+	Where-Object { !$_.PSIsContainer } | Group-Object Extension |
+	Select-Object @{n=&quot;Extension&quot;;e={$_.Name -replace '^\.'}},
+	  @{n=&quot;Size (MB)&quot;;e={[math]::Round((($_.Group | Measure-Object Length -Sum).Sum / 1MB), 2)}}, Count
+}
+</code></pre>
+
+<h4 id="list-functions">List-Functions</h4>
+
+<p>Finally, this is an alias that returns a list of all the custom functions you&rsquo;ve defined!</p>
+
+<pre><code class="language-powershell">Function List-Functions
+{
+	Get-ChildItem function:\
+}
+</code></pre>
+
+</div>
+            <div class="footer">
+                <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+<script type="text/javascript">
+    hljs.configure({languages: []});
+    hljs.initHighlightingOnLoad();
+</script>
+
+
+            </div>
+        </div>
+        
+                
+    </body>
+</html>

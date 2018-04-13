@@ -1,0 +1,98 @@
+---
+title: "PowerShell Profile & Functions"
+author: ~
+date: '2018-04-12'
+slug: opelr-r-package
+categories: [R]
+# tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+    toc_depth: 1
+---
+
+
+
+<p>Until starting my current position, I had been a pretty strict Mac OS user. As one can expect from a job in the public sector however, I quickly had to face the reality of full-time Windows use, which I had successfully avoided since my days as a high school student with a laptop that barely ran Vista. While initially hesitant, I’ve become gradually more accustomed to and fond of the Windows environment – even running Windows 10 as the primary operating system on my desktop at home.</p>
+<p>My Windows transition also led me to become familiar with PowerShell. While a bit more obtuse that Unix’s bash shell, PowerShell has grown on me over the past few years and has become an integral part of my pipeline at work and at home.</p>
+<p>Something I did not find out about until a few months in to my PowerShell use, but which has ultimately become irreplaceable, is the PowerShell Profile. This Profile allows user to save functions, aliases, and general shell settings between sessions, and automatically loads when the terminal starts.</p>
+<p><a href="https://www.howtogeek.com/50236/customizing-your-powershell-profile/">How-To Geek has a good article</a> that covers how to set up a basic PowerShell profile, which I recommend reading before moving forward. All the code below can go in your PS Profile in any order, but I’ll present it in the order that makes the most sense to me.</p>
+<div id="general-terminal-setup" class="section level2">
+<h2><span class="header-section-number">0.1</span> General Terminal Setup</h2>
+<p>I tend to prefer light (or colorful!) text on dark backgrounds in all the IDEs I use, and PowerShell is no exception. Here, we’ll set our terminal colors, change the width of the terminal to 80 characters, and give our window a more fun title.</p>
+<pre class="powershell"><code>$host.ui.RawUI.WindowTitle = &quot;Beep Boop Terminal&quot;
+
+$Shell = $Host.UI.RawUI
+$shell.BackgroundColor = &quot;Black&quot;
+$shell.ForegroundColor = &quot;White&quot;
+
+$size = $Shell.WindowSize
+$size.width=80
+$size.height=25</code></pre>
+</div>
+<div id="powershell-path" class="section level2">
+<h2><span class="header-section-number">0.2</span> PowerShell Path</h2>
+<p>While most Windows-based developers are probably familiar with adding variables to their system PATH, there are some scripts I’ve written/downloaded that I only want PowerShell, not the whole computer, to have easy access to. As such, we’ll append our PowerShell environment’s <em>Path</em> with the directories where our scripts reside. A few examples are below:</p>
+<pre class="powershell"><code>$env:Path += &quot;;C:\Users\Ry\Documents\WindowsPowerShell&quot;
+$env:Path += &quot;;C:\Python27\Scripts\Personal&quot;</code></pre>
+<p>Now any shell-specific Python or PowerShell scripts I have can be called in the terminal!</p>
+</div>
+<div id="aliases" class="section level2">
+<h2><span class="header-section-number">0.3</span> Aliases</h2>
+<p>PowerShell <a href="https://ss64.com/ps/">already utilizes a lot of aliases</a> to make the transition from bash simpler – familiar commands like <code>ls</code>, <code>mkdir</code>, and <code>cd</code> are available out of the box, and much easier to remember than their PowerShell names even for users who are unfamiliar with bash (for reference, those names are <code>Get-ChildItem</code>, <code>New-Item -Type folder</code>, and <code>Set-Location</code>). Within our PowerShell Profile, we can also make aliases for either native PowerShell commands, or, as I’ve done, to open programs via the terminal. Some programs, like VSCode (<code>code</code>), have existing aliases you can use to call them from PowerShell, but here are some that I frequently use.</p>
+<pre class="powershell"><code>    new-item alias:np -value &quot;C:\Program Files (x86)\Notepad++\notepad++.exe&quot;
+    new-item alias:vim -value &quot;C:\Program Files (x86)\Vim\vim80\vim.exe&quot;
+    new-item alias:python-27 -value &quot;C:\Python27\python.exe&quot;</code></pre>
+</div>
+<div id="functions" class="section level2">
+<h2><span class="header-section-number">0.4</span> Functions</h2>
+<p>The real benefit of having a PowerShell profile is being able to write down all the brilliant functions you’ve written (or copied from Stack Overflow) to use months down the road!</p>
+<div id="general-use" class="section level3 tabset tabset-pills tabset-fade">
+<h3><span class="header-section-number">0.4.1</span> General Use</h3>
+<div id="edit-profile" class="section level4">
+<h4><span class="header-section-number">0.4.1.1</span> Edit-Profile</h4>
+<p>Opens your PowerShell Profile with NotePad++ (assumes that alias is defined as above).</p>
+<pre class="powershell"><code>Function Edit-Profile
+{
+  np $profile
+}</code></pre>
+</div>
+<div id="shortcut-to-directory" class="section level4">
+<h4><span class="header-section-number">0.4.1.2</span> Shortcut to Directory</h4>
+<p>Changes directory to a specified location, pretty simple.</p>
+<pre class="powershell"><code>Function projects
+{
+  cd D:\data\lab\code\
+}</code></pre>
+</div>
+<div id="change-prompt" class="section level4">
+<h4><span class="header-section-number">0.4.1.3</span> Change Prompt</h4>
+<p>I can’t stand when the text-prompt shows the entire filepath of the directory I’m in, so this function, which is automatically called on startup an never needs to be touched again, just shows the name of the directory where I currently reside – so much cleaner.</p>
+<pre class="powershell"><code>Function prompt
+{
+  $p = Split-Path -leaf -path (Get-Location)
+  &quot;$p&gt; &quot;
+}</code></pre>
+</div>
+<div id="get-filesbytype" class="section level4">
+<h4><span class="header-section-number">0.4.1.4</span> Get-FilesByType</h4>
+<p>This function lists the total number and size (in MB) of all files with the same extension in a directory and all child directories. Equivalent to a MySQL <code>SELECT Extension, COUNT(Extension), SUM(Size) FROM ls GROUP BY Extension</code>.</p>
+<pre class="powershell"><code>Function Get-FilesByType
+{
+    Get-ChildItem -Path $directory -Recurse |
+    Where-Object { !$_.PSIsContainer } | Group-Object Extension |
+    Select-Object @{n=&quot;Extension&quot;;e={$_.Name -replace &#39;^\.&#39;}},
+      @{n=&quot;Size (MB)&quot;;e={[math]::Round((($_.Group | Measure-Object Length -Sum).Sum / 1MB), 2)}}, Count
+}</code></pre>
+</div>
+<div id="list-functions" class="section level4">
+<h4><span class="header-section-number">0.4.1.5</span> List-Functions</h4>
+<p>Finally, this is an alias that returns a list of all the custom functions you’ve defined!</p>
+<pre class="powershell"><code>Function List-Functions
+{
+    Get-ChildItem function:\
+}</code></pre>
+</div>
+</div>
+</div>

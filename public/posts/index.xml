@@ -6,127 +6,28 @@
     <description>Recent content in Posts on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 28 Sep 2014 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 12 Apr 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Creating a New Theme</title>
-      <link>/posts/creating-a-new-theme/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <title>PowerShell Profile &amp; Functions</title>
+      <link>/posts/opelr-r-package/</link>
+      <pubDate>Thu, 12 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/posts/creating-a-new-theme/</guid>
-      <description>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&amp;rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&amp;rsquo;t cover using CSS to style your theme.
-We&amp;rsquo;ll start with creating a new site with a very basic template.</description>
+      <guid>/posts/opelr-r-package/</guid>
+      <description>Until starting my current position, I had been a pretty strict Mac OS user. As one can expect from a job in the public sector however, I quickly had to face the reality of full-time Windows use, which I had successfully avoided since my days as a high school student with a laptop that barely ran Vista. While initially hesitant, I’ve become gradually more accustomed to and fond of the Windows environment – even running Windows 10 as the primary operating system on my desktop at home.</description>
     </item>
     
     <item>
-      <title>Migrate to Hugo from Jekyll</title>
-      <link>/posts/migrate-from-jekyll/</link>
-      <pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate>
+      <title>opelR R Package</title>
+      <link>/posts/opelr-r-package/</link>
+      <pubDate>Thu, 12 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/posts/migrate-from-jekyll/</guid>
-      <description>Move static content to static Jekyll has a rule that any directory not starting with _ will be copied as-is to the _site output. Hugo keeps all static content under static. You should therefore move it all there. With Jekyll, something that looked like
-▾ &amp;lt;root&amp;gt;/ ▾ images/ logo.png  should become
-▾ &amp;lt;root&amp;gt;/ ▾ static/ ▾ images/ logo.png  Additionally, you&amp;rsquo;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description>
-    </item>
-    
-    <item>
-      <title>A Little Because by Teshima Aoi</title>
-      <link>/posts/a-little-because-by-teshima-aoi/</link>
-      <pubDate>Thu, 21 Dec 2017 23:30:36 +0800</pubDate>
-      
-      <guid>/posts/a-little-because-by-teshima-aoi/</guid>
-      <description>Share a song &amp;ldquo;A Little Because&amp;rdquo;.
- A Little Because is a short version of Because.
- 菅野よう子と手嶌葵によるコラボレーションシングル「Because」が、本日4月7日にiTunes Store限定でリリースされた。
-昨年はプロデュースワークのみならず、自選コレクションアルバム「スペース バイオチャージ」のリリースや、リーダーを務めるバンドYOKO KANNO SEATBELTSの“来地球記念”ライブ「超時空七夕ソニック」の開催など、個人名義の活動を多く行いファンを喜ばせた菅野よう子。今回iTunes Store限定で発売される新作「Because」では手嶌葵をボーカルに迎え、透明感のある美しいポップスを作り上げている。なお、シングルには別アレンジバージョン「a little because」もあわせて収録。
-また本作では、やくしまるえつこ（相対性理論、TUTU HELVETICAほか）がジャケットのイラストを手がけている。今度は音楽での共演にも期待したいところだ。
-Source: natalie</description>
-    </item>
-    
-    <item>
-      <title>Article With Images Preview</title>
-      <link>/posts/article-with-images-preview/</link>
-      <pubDate>Wed, 20 Dec 2017 12:36:50 +0800</pubDate>
-      
-      <guid>/posts/article-with-images-preview/</guid>
-      <description>ドライブサーガ仮面ライダーチェイサーの打ち上げに行ってきました。一か月皆さんにお会いしてないだけで、随分久しぶりに感じます。お楽しみに！
-ふみかちゃんがバックからおもむろに取り出したティッシュが大きくて笑いました!(記念写真参照)
-source: Twiiter@lespros_rio</description>
-    </item>
-    
-    <item>
-      <title>Syntax Highlighting Preview</title>
-      <link>/posts/syntax-highlighting-preview/</link>
-      <pubDate>Wed, 20 Dec 2017 12:33:21 +0800</pubDate>
-      
-      <guid>/posts/syntax-highlighting-preview/</guid>
-      <description>Syntax highlighting is a feature of text editors that are used for programming, scripting, or markup languages, such as HTML. Besides Chroma, the default syntax hightlighter in Hugo, highlight.js is a better choice. The bare minimum for using highlight.js on a web page is linking to the library along with one of the styles and calling initHighlightingOnLoad:
-&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;/path/to/styles/default.css&amp;quot;&amp;gt; &amp;lt;script src=&amp;quot;/path/to/highlight.pack.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script&amp;gt;hljs.initHighlightingOnLoad();&amp;lt;/script&amp;gt;  Theme one uses the github style color theme.</description>
-    </item>
-    
-    <item>
-      <title>Hugo Quick Start</title>
-      <link>/posts/hugo-quick-start/</link>
-      <pubDate>Tue, 20 Dec 2016 20:08:19 +0800</pubDate>
-      
-      <guid>/posts/hugo-quick-start/</guid>
-      <description>Step 1: Install Hugo Homebrew, a package manager for macOS, can be installed from brew.sh. See install if you are running Windows etc.
-brew install hugo  To verify your new install:
-hugo version  Step 2: Create a New Site hugo new site quickstart  The above will create a new Hugo site in a folder named quickstart.
-Step 3: Add a Theme See themes.gohugo.io for a list of themes to consider.</description>
-    </item>
-    
-    <item>
-      <title>Another Hugo Post</title>
-      <link>/posts/another-hugo-post/</link>
-      <pubDate>Tue, 02 Sep 2014 12:29:19 +0800</pubDate>
-      
-      <guid>/posts/another-hugo-post/</guid>
-      <description>&lt;h2 id=&#34;toml-yaml-json-oh-my&#34;&gt;TOML, YAML, JSON &amp;mdash; Oh my!&lt;/h2&gt;
-
-&lt;p&gt;One of the nifty Hugo features we should cover: flexible configuration and front matter formats! This entry has front
-matter in &lt;code&gt;toml&lt;/code&gt;, unlike the last one which used &lt;code&gt;yaml&lt;/code&gt;, and &lt;code&gt;json&lt;/code&gt; is also available if that&amp;rsquo;s your preference.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Hello Hugo!</title>
-      <link>/posts/hello-hugo/</link>
-      <pubDate>Mon, 01 Sep 2014 12:19:03 +0800</pubDate>
-      
-      <guid>/posts/hello-hugo/</guid>
-      <description>Hello from Hugo! If you&amp;rsquo;re reading this in your browser, good job! The file content/post/hello-hugo.md has been converted into a complete HTML document by Hugo. Isn&amp;rsquo;t that pretty nifty?
-A Section Here&amp;rsquo;s a simple titled section where you can place whatever information you want.
-You can use inline HTML if you want, but really there&amp;rsquo;s not much that Markdown can&amp;rsquo;t do.
-Showing off with Markdown A full cheat sheet can be found here or through Google.</description>
-    </item>
-    
-    <item>
-      <title>(Hu)go Template Primer</title>
-      <link>/posts/goisforlovers/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/goisforlovers/</guid>
-      <description>Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.
-This document is a brief primer on using go templates.</description>
-    </item>
-    
-    <item>
-      <title>Getting Started with Hugo</title>
-      <link>/posts/hugoisforlovers/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/hugoisforlovers/</guid>
-      <description>Step 1. Install Hugo Goto hugo releases and download the appropriate version for your os and architecture.
-Save it somewhere specific as we will be using it in the next step.
-More complete instructions are available at installing hugo
-Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
-Follow the following steps:
- Clone the hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313  Corresponding pseudo commands:</description>
+      <guid>/posts/opelr-r-package/</guid>
+      <description>Following the advice of the wonderful Hadley Wickham, Hillary Parker, and Karl Broman, I took the plunge last year and drafted the first version of my very own R package. Conveniently, my name fits the motif of R-related puns (useRs, etc.), and so opelR was born!
+Unlike many R packages you’re used to importing into your scripts, there’s no real unifying theme or problem these functions are trying to solve, except to make my life more convenient.</description>
     </item>
     
   </channel>

@@ -1,0 +1,47 @@
+---
+title: opelR R Package
+author: ~
+date: '2018-04-12'
+slug: opelr-r-package
+categories: [R]
+# tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: true
+    toc_depth: 1
+---
+
+Following the advice of the wonderful [Hadley Wickham](http://r-pkgs.had.co.nz/), [Hillary Parker](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/), and [Karl Broman](http://kbroman.org/pkg_primer/), I took the plunge last year and drafted the first version of my very own R package. Conveniently, my name fits the motif of R-related puns (useRs, etc.), and so [opelR](https://github.com/opelr/opelR) was born!
+
+Unlike many R packages you're used to importing into your scripts, there's no real unifying theme or problem these functions are trying to solve, except to make my life more convenient. There are some simple functions, like `sem` that computes standard error of the mean, and `col2num`, which facilities use of some `openxlsx` functions and allows users to call columns by letter index rather than by number.
+
+A function that I'm more pleased with is `encode`, which utilizes the base `rle` function to split non-continuous vector of numbers into a nested list.
+
+```
+encode <- function(x, print = FALSE){
+  run_lengths <- rle(x - seq_along(x))
+  run_lengths$values <- seq_along(run_lengths$values)
+  out <- split(x, inverse.rle(run_lengths))
+  if (print == TRUE){
+    print(out)
+  }
+}
+
+encode(c(1:3, 6, 8:9), print = T)
+```
+
+```
+## $`1`
+## [1] 1 2 3
+## 
+## $`2`
+## [1] 6
+## 
+## $`3`
+## [1] 8 9
+```
+
+This is particularly useful when working with time-series data, which I frequently do when working with sleep studies and actigraphy, allowing me to determine the lengths, position, and frequency of continuous sleep bouts.
+
+Currently there are about 10 functions in the package, but as Hillary points out in the blog post I linked above, this is more about releasing a minimum viable product than something game-changing. I plan to continue adding to this library as time goes on, and hope that someone out there finds one of these functions useful.

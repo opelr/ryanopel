@@ -15,7 +15,7 @@ theme = "hyde-hyde"
     author = "Ryan Opel"
     title = "Ryan Opel"
     description = "Ryan Opel"
-    authorimage = "/img/hugo.png"
+    authorimage = "/img/ryan_sophie_snow.png"
     dateformat = "2006-01-02"
     highlightjs = true
     # highlightjsstyle = "github"
@@ -42,6 +42,6 @@ theme = "hyde-hyde"
     url = "/posts/"
 [[menu.main]]
     name = "About"
-    identifier = "about"
+    identifier = "about/"
     weight = 200
-    url = "/about/"
+    url = "/about/me/"
