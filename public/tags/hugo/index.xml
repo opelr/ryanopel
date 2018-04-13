@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hugo on </title>
+    <link>/tags/hugo/</link>
+    <description>Recent content in Hugo on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 20 Dec 2016 20:08:19 +0800</lastBuildDate>
+    
+	<atom:link href="/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hugo Quick Start</title>
+      <link>/posts/hugo-quick-start/</link>
+      <pubDate>Tue, 20 Dec 2016 20:08:19 +0800</pubDate>
+      
+      <guid>/posts/hugo-quick-start/</guid>
+      <description>Step 1: Install Hugo Homebrew, a package manager for macOS, can be installed from brew.sh. See install if you are running Windows etc.
+brew install hugo  To verify your new install:
+hugo version  Step 2: Create a New Site hugo new site quickstart  The above will create a new Hugo site in a folder named quickstart.
+Step 3: Add a Theme See themes.gohugo.io for a list of themes to consider.</description>
+    </item>
+    
+    <item>
+      <title>Another Hugo Post</title>
+      <link>/posts/another-hugo-post/</link>
+      <pubDate>Tue, 02 Sep 2014 12:29:19 +0800</pubDate>
+      
+      <guid>/posts/another-hugo-post/</guid>
+      <description>&lt;h2 id=&#34;toml-yaml-json-oh-my&#34;&gt;TOML, YAML, JSON &amp;mdash; Oh my!&lt;/h2&gt;
+
+&lt;p&gt;One of the nifty Hugo features we should cover: flexible configuration and front matter formats! This entry has front
+matter in &lt;code&gt;toml&lt;/code&gt;, unlike the last one which used &lt;code&gt;yaml&lt;/code&gt;, and &lt;code&gt;json&lt;/code&gt; is also available if that&amp;rsquo;s your preference.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hello Hugo!</title>
+      <link>/posts/hello-hugo/</link>
+      <pubDate>Mon, 01 Sep 2014 12:19:03 +0800</pubDate>
+      
+      <guid>/posts/hello-hugo/</guid>
+      <description>Hello from Hugo! If you&amp;rsquo;re reading this in your browser, good job! The file content/post/hello-hugo.md has been converted into a complete HTML document by Hugo. Isn&amp;rsquo;t that pretty nifty?
+A Section Here&amp;rsquo;s a simple titled section where you can place whatever information you want.
+You can use inline HTML if you want, but really there&amp;rsquo;s not much that Markdown can&amp;rsquo;t do.
+Showing off with Markdown A full cheat sheet can be found here or through Google.</description>
+    </item>
+    
+    <item>
+      <title>Getting Started with Hugo</title>
+      <link>/posts/hugoisforlovers/</link>
+      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/hugoisforlovers/</guid>
+      <description>Step 1. Install Hugo Goto hugo releases and download the appropriate version for your os and architecture.
+Save it somewhere specific as we will be using it in the next step.
+More complete instructions are available at installing hugo
+Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
+Follow the following steps:
+ Clone the hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313  Corresponding pseudo commands:</description>
+    </item>
+    
+  </channel>
+</rss>

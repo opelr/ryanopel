@@ -1,0 +1,47 @@
+## Basic Configuration
+baseurl = "https://www.ryanopel.com/"
+languageCode = "en"
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+theme = "hyde-hyde"
+
+## Hugo Built-in Features
+# disqusShortname = "your-disqus-shortname"
+# googleAnalytics = "your-google-analytics-id"
+# enableRobotsTXT = true
+
+## Site Settings
+[params]
+    author = "Ryan Opel"
+    title = "Ryan Opel"
+    description = "Ryan Opel"
+    authorimage = "/img/hugo.png"
+    dateformat = "2006-01-02"
+    highlightjs = true
+    # highlightjsstyle = "github"
+    # please choose either GraphComment or Disqus
+    # GraphCommentId = "your-graph-comment-id" 
+
+## Social Accounts
+[params.social]
+    email = "ryan.a.opel@gmail.com"
+    github = "opelr"
+    linkedin = "ryanopel"
+    twitter = "_opelr"
+    
+    ## instagram = "<username>"
+    ## xing = "<username>"
+    ## facebook = "<username>"
+    ## stackoverflow = "<username>"
+
+## Main Menu
+[[menu.main]]
+    name = "Posts"
+    weight = 100
+    identifier = "posts"
+    url = "/posts/"
+[[menu.main]]
+    name = "About"
+    identifier = "about"
+    weight = 200
+    url = "/about/"
