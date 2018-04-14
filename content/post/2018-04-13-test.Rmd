@@ -5,6 +5,7 @@ date: '2018-04-13'
 slug: test
 categories: []
 tags: []
+draft: true
 output:
   blogdown::html_page:
     # toc: true

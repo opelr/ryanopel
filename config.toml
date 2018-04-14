@@ -2,8 +2,11 @@
 baseurl = "https://www.ryanopel.com/"
 languageCode = "en"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+enableEmoji = "true"
 
 theme = "hyde-hyde"
+
+title = "Ryan Opel"
 
 ## Hugo Built-in Features
 # disqusShortname = "your-disqus-shortname"
@@ -36,17 +39,17 @@ theme = "hyde-hyde"
 
 ## Main Menu
 [[menu.main]]
-    name = "Home"
-    weight = 100
+    ##name = "Home"
+    ##weight = 100
     # identifier = ""
-    url = "/"
+    ##url = "/"
 [[menu.main]]
     name = "Posts"
-    weight = 200
+    weight = 100
     identifier = "post"
     url = "/post/"
 [[menu.main]]
     name = "About"
     identifier = "about/"
-    weight = 300
+    weight = 200
     url = "/about/me/"
