@@ -6,10 +6,20 @@
     <description>Recent content in R on Ryan Opel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 12 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 26 Apr 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Rolling functions on non-consecutive grouped data using dplyr and zoo</title>
+      <link>/post/dplyr-zoo-rollapply/</link>
+      <pubDate>Thu, 26 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/dplyr-zoo-rollapply/</guid>
+      <description>When working with time-series data in R, zoo is an indispensable tool to keep on your bench. Here, I demonstrate a use case for one of the package’s best functions, rollapply1, and one solution for handling non-consecutive time-series data.
+In our hypothetical experiment, we have three individuals (“A”, “B”, and “C”) who were supposed to have data at ten consecutive time-points. However, multiple time-points for each individual are missing in our final dataset.</description>
+    </item>
     
     <item>
       <title>opelR R Package</title>

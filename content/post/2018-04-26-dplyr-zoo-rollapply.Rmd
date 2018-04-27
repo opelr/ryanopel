@@ -1,0 +1,89 @@
+---
+title: Rolling functions on non-consecutive grouped data using dplyr and zoo
+author: ~
+date: '2018-04-26'
+slug: dplyr-zoo-rollapply
+categories: [R]
+tags: [zoo, tidyverse]
+output:
+  blogdown::html_page:
+    # toc: true
+    # toc_depth: 1
+    number_sections: true
+    # code_folding: hide
+---
+
+When working with time-series data in R, `zoo` is an indispensable tool to keep on your bench. Here, I  demonstrate a use case for one of the package's best functions, `rollapply`[^1], and one solution for handling non-consecutive time-series data.
+
+[^1]: Allows the user to apply a function via a rolling window over an array.
+
+In our hypothetical experiment, we have three individuals ("A", "B", and "C") who were supposed to have data at ten consecutive time-points. However, multiple time-points for each individual are missing in our final dataset. We want to apply a rolling function to this data and need to ensure that non-consecutive days are treated as such.
+
+An example dataset is displayed below:
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(zoo)
+
+dat <- tibble(ID = factor(rep(LETTERS[1:3], each = 10)),
+              Timepoint = rep(1:10, 3),
+              Value = floor(rnorm(30, 10, 2.5))) %>% 
+  filter(!(ID == "A" & Timepoint >= 5), !(ID == "B" & Timepoint %in% c(4,5,6)),
+         !(ID == "C" & Timepoint %in% c(3, 8)))
+```
+
+```{r, echo=F}
+head(dat, 10) %>% 
+  knitr::kable(.)
+```
+
+To ensure non-consecutive days are treated differently, we'll write a quick function to enumerate the continous data in an array, called `enumerate_cont`.
+
+```{r}
+enumerate_cont <- function(x) {
+  r <- rle(x - seq_along(x))
+  r$values <- seq_along(r$values)
+  return(inverse.rle(r))
+}
+```
+
+As an example:
+
+```{r}
+x <- c(1:3, 5:7, 9)
+y <- enumerate_cont(x)
+names(x) <- y
+x
+```
+
+We can then use `dplyr::group_by` to apply our `enumerate_cont` function to each indivudal in our dataset. We'll store the enumerated periods in the column `Bout`.
+
+```{r}
+dat <- dat %>% 
+  group_by(ID) %>% 
+  mutate(Bout = enumerate_cont(Timepoint))
+```
+
+```{r, echo=F}
+head(dat, 10) %>% 
+  knitr::kable(.)
+```
+
+Finally, we can again use `dplyr::group_by` to apply our rolling function[^2], in this case a moving product, grouping on both the `ID` and `Bout` columns. An `NA` in the `Rolling_Product` column indicates a break in either of our two grouping variables, as specified by the `fill` argument.
+
+[^2]: The other parameters passed to `zoo::rollapply` in this example specify the window size (`width`), the padding/fill value (`fill`), and the window alignment (`align`). 
+
+```{r}
+dat <- dat %>% 
+  group_by(ID, Bout) %>% 
+  mutate(Rolling_Product = zoo::rollapply(data = Value, width = 2,
+                                          FUN = function(x) Reduce(`*`, x),
+                                          fill = NA, align = "right"))
+```
+
+```{r, echo=F}
+dat %>% 
+  knitr::kable(.)
+```
+
+That's it! This is a case I run into constantly, and hope that this gist helps someone else out there.

@@ -1,0 +1,338 @@
+---
+title: Rolling functions on non-consecutive grouped data using dplyr and zoo
+author: ~
+date: '2018-04-26'
+slug: dplyr-zoo-rollapply
+categories: [R]
+tags: [zoo, tidyverse]
+output:
+  blogdown::html_page:
+    # toc: true
+    # toc_depth: 1
+    number_sections: true
+    # code_folding: hide
+---
+
+
+
+<p>When working with time-series data in R, <code>zoo</code> is an indispensable tool to keep on your bench. Here, I demonstrate a use case for one of the package’s best functions, <code>rollapply</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, and one solution for handling non-consecutive time-series data.</p>
+<p>In our hypothetical experiment, we have three individuals (“A”, “B”, and “C”) who were supposed to have data at ten consecutive time-points. However, multiple time-points for each individual are missing in our final dataset. We want to apply a rolling function to this data and need to ensure that non-consecutive days are treated as such.</p>
+<p>An example dataset is displayed below:</p>
+<pre class="r"><code>library(tidyverse)
+library(zoo)
+
+dat &lt;- tibble(ID = factor(rep(LETTERS[1:3], each = 10)),
+              Timepoint = rep(1:10, 3),
+              Value = floor(rnorm(30, 10, 2.5))) %&gt;% 
+  filter(!(ID == &quot;A&quot; &amp; Timepoint &gt;= 5), !(ID == &quot;B&quot; &amp; Timepoint %in% c(4,5,6)),
+         !(ID == &quot;C&quot; &amp; Timepoint %in% c(3, 8)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ID</th>
+<th align="right">Timepoint</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">A</td>
+<td align="right">2</td>
+<td align="right">13</td>
+</tr>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">3</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">A</td>
+<td align="right">4</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">1</td>
+<td align="right">13</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">2</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">3</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">7</td>
+<td align="right">13</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">8</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">9</td>
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
+<p>To ensure non-consecutive days are treated differently, we’ll write a quick function to enumerate the continous data in an array, called <code>enumerate_cont</code>.</p>
+<pre class="r"><code>enumerate_cont &lt;- function(x) {
+  r &lt;- rle(x - seq_along(x))
+  r$values &lt;- seq_along(r$values)
+  return(inverse.rle(r))
+}</code></pre>
+<p>As an example:</p>
+<pre class="r"><code>x &lt;- c(1:3, 5:7, 9)
+y &lt;- enumerate_cont(x)
+names(x) &lt;- y
+x</code></pre>
+<pre><code>## 1 1 1 2 2 2 3 
+## 1 2 3 5 6 7 9</code></pre>
+<p>We can then use <code>dplyr::group_by</code> to apply our <code>enumerate_cont</code> function to each indivudal in our dataset. We’ll store the enumerated periods in the column <code>Bout</code>.</p>
+<pre class="r"><code>dat &lt;- dat %&gt;% 
+  group_by(ID) %&gt;% 
+  mutate(Bout = enumerate_cont(Timepoint))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ID</th>
+<th align="right">Timepoint</th>
+<th align="right">Value</th>
+<th align="right">Bout</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">A</td>
+<td align="right">2</td>
+<td align="right">13</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">A</td>
+<td align="right">4</td>
+<td align="right">10</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">2</td>
+<td align="right">8</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">3</td>
+<td align="right">10</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">7</td>
+<td align="right">13</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">8</td>
+<td align="right">10</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">9</td>
+<td align="right">6</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>Finally, we can again use <code>dplyr::group_by</code> to apply our rolling function<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, in this case a moving product, grouping on both the <code>ID</code> and <code>Bout</code> columns. An <code>NA</code> in the <code>Rolling_Product</code> column indicates a break in either of our two grouping variables, as specified by the <code>fill</code> argument.</p>
+<pre class="r"><code>dat &lt;- dat %&gt;% 
+  group_by(ID, Bout) %&gt;% 
+  mutate(Rolling_Product = zoo::rollapply(data = Value, width = 2,
+                                          FUN = function(x) Reduce(`*`, x),
+                                          fill = NA, align = &quot;right&quot;))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ID</th>
+<th align="right">Timepoint</th>
+<th align="right">Value</th>
+<th align="right">Bout</th>
+<th align="right">Rolling_Product</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">A</td>
+<td align="right">2</td>
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">52</td>
+</tr>
+<tr class="odd">
+<td align="left">A</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">65</td>
+</tr>
+<tr class="even">
+<td align="left">A</td>
+<td align="right">4</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">50</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">2</td>
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="right">104</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">3</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">80</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">7</td>
+<td align="right">13</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">8</td>
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="right">130</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="right">9</td>
+<td align="right">6</td>
+<td align="right">2</td>
+<td align="right">60</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="right">10</td>
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">C</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">2</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">100</td>
+</tr>
+<tr class="even">
+<td align="left">C</td>
+<td align="right">4</td>
+<td align="right">11</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">5</td>
+<td align="right">12</td>
+<td align="right">2</td>
+<td align="right">132</td>
+</tr>
+<tr class="even">
+<td align="left">C</td>
+<td align="right">6</td>
+<td align="right">8</td>
+<td align="right">2</td>
+<td align="right">96</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">7</td>
+<td align="right">11</td>
+<td align="right">2</td>
+<td align="right">88</td>
+</tr>
+<tr class="even">
+<td align="left">C</td>
+<td align="right">9</td>
+<td align="right">14</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">C</td>
+<td align="right">10</td>
+<td align="right">8</td>
+<td align="right">3</td>
+<td align="right">112</td>
+</tr>
+</tbody>
+</table>
+<p>That’s it! This is a case I run into constantly, and hope that this gist helps someone else out there.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Allows the user to apply a function via a rolling window over an array.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>The other parameters passed to <code>zoo::rollapply</code> in this example specify the window size (<code>width</code>), the padding/fill value (<code>fill</code>), and the window alignment (<code>align</code>).<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
