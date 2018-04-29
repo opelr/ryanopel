@@ -1,10 +1,9 @@
 ---
 title: opelR R Package
 author: ~
-date: '2018-04-12'
+date: '2018-04-17'
 slug: opelr-r-package
 categories: [R]
-# tags: []
 output:
   blogdown::html_page:
     # toc: true
@@ -14,19 +13,22 @@ output:
 
 
 
-<p>Following the advice of the wonderful <a href="http://r-pkgs.had.co.nz/">Hadley Wickham</a>, <a href="https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/">Hillary Parker</a>, and <a href="http://kbroman.org/pkg_primer/">Karl Broman</a>, I took the plunge last year and drafted the first version of my very own R package. Conveniently, my name fits the motif of R-related puns (useRs, etc.), and so <a href="https://github.com/opelr/opelR">opelR</a> was born!</p>
-<p>Unlike many R packages you’re used to importing into your scripts, there’s no real unifying theme or problem these functions are trying to solve, except to make my life more convenient. There are some simple functions, like <code>sem</code> that computes standard error of the mean, and <code>col2num</code>, which facilities use of some <code>openxlsx</code> functions and allows users to call columns by letter index rather than by number.</p>
+<p>Following the advice of the wonderful <a href="http://r-pkgs.had.co.nz/">Hadley Wickham</a>, <a href="https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/">Hillary Parker</a>, and <a href="http://kbroman.org/pkg_primer/">Karl Broman</a>, I took the plunge last year and pushed the first version of my personal R package. Conveniently, my name fits the motif of R-related puns (useRs, etc.), and so <a href="https://github.com/opelr/opelR">opelR</a> was born!</p>
+<p>Unlike the most popular packages on CRAN, there’s no unifying theme to the functions included, except that they make my life easier. There are some simple functions, like <code>sem</code> that computes standard error of the mean, and <code>col2num</code>, which facilities use of some <code>openxlsx</code> functions and allows users to call columns by letter index rather than by number.</p>
 <p>A function that I’m more pleased with is <code>encode</code>, which utilizes the base <code>rle</code> function to split non-continuous vector of numbers into a nested list.</p>
-<pre><code>encode &lt;- function(x, print = FALSE){
+<pre class="r"><code>encode &lt;- function(x, as.list = FALSE){
   run_lengths &lt;- rle(x - seq_along(x))
   run_lengths$values &lt;- seq_along(run_lengths$values)
-  out &lt;- split(x, inverse.rle(run_lengths))
-  if (print == TRUE){
-    print(out)
+  i_rle &lt;- inverse.rle(run_lengths)
+  
+  if (as.list) {
+    return(split(x, i_rle))
+  } else{
+    return(i_rle)
   }
 }
 
-encode(c(1:3, 6, 8:9), print = T)</code></pre>
+encode(c(1:3, 6, 8:9), as.list = TRUE)</code></pre>
 <pre><code>## $`1`
 ## [1] 1 2 3
 ## 
@@ -35,5 +37,5 @@ encode(c(1:3, 6, 8:9), print = T)</code></pre>
 ## 
 ## $`3`
 ## [1] 8 9</code></pre>
-<p>This is particularly useful when working with time-series data, which I frequently do when working with sleep studies and actigraphy, allowing me to determine the lengths, position, and frequency of continuous sleep bouts.</p>
-<p>Currently there are about 10 functions in the package, but as Hillary points out in the blog post I linked above, this is more about releasing a minimum viable product than something game-changing. I plan to continue adding to this library as time goes on, and hope that someone out there finds one of these functions useful.</p>
+<p>This is particularly useful when working with time-series data, which I frequently do with sleep studies and actigraphy, allowing me to determine the lengths, position, and frequency of continuous sleep bouts.</p>
+<p>Currently there are about ten functions in the package, but as Hillary points out in the blog post I linked above, this is more about releasing a minimum viable product than something game-changing. I plan to continue adding to this library as time goes on, and hope that someone out there finds one of these functions useful.</p>
