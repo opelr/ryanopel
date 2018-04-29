@@ -30,11 +30,8 @@ dat <- tibble(ID = factor(rep(LETTERS[1:3], each = 10)),
               Value = floor(rnorm(30, 10, 2.5))) %>% 
   filter(!(ID == "A" & Timepoint >= 5), !(ID == "B" & Timepoint %in% c(4,5,6)),
          !(ID == "C" & Timepoint %in% c(3, 8)))
-```
 
-```{r, echo=F}
-head(dat, 10) %>% 
-  knitr::kable(.)
+head(dat, 10)
 ```
 
 To ensure non-consecutive days are treated differently, we'll write a quick function to enumerate the continous data in an array, called `enumerate_cont`.
@@ -53,6 +50,7 @@ As an example:
 x <- c(1:3, 5:7, 9)
 y <- enumerate_cont(x)
 names(x) <- y
+
 x
 ```
 
@@ -62,11 +60,8 @@ We can then use `dplyr::group_by` to apply our `enumerate_cont` function to each
 dat <- dat %>% 
   group_by(ID) %>% 
   mutate(Bout = enumerate_cont(Timepoint))
-```
 
-```{r, echo=F}
-head(dat, 10) %>% 
-  knitr::kable(.)
+head(dat, 10)
 ```
 
 Finally, we can again use `dplyr::group_by` to apply our rolling function[^2], in this case a moving product, grouping on both the `ID` and `Bout` columns. An `NA` in the `Rolling_Product` column indicates a break in either of our two grouping variables, as specified by the `fill` argument.
@@ -79,11 +74,8 @@ dat <- dat %>%
   mutate(Rolling_Product = zoo::rollapply(data = Value, width = 2,
                                           FUN = function(x) Reduce(`*`, x),
                                           fill = NA, align = "right"))
+
+knitr::kable(dat)
 ```
 
-```{r, echo=F}
-dat %>% 
-  knitr::kable(.)
-```
-
-That's it! This is a case I run into constantly, and hope that this gist helps someone else out there.
+That's it! This is a case I run into frequently, and hope that this gist is useful to others.
