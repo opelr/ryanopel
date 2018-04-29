@@ -22,22 +22,22 @@ In our hypothetical experiment, we have three individuals (“A”, “B”, and
     </item>
     
     <item>
+      <title>opelR R Package</title>
+      <link>/post/opelr-r-package/</link>
+      <pubDate>Tue, 17 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/opelr-r-package/</guid>
+      <description>Following the advice of the wonderful Hadley Wickham, Hillary Parker, and Karl Broman, I took the plunge last year and pushed the first version of my personal R package. Conveniently, my name fits the motif of R-related puns (useRs, etc.), and so opelR was born!
+Unlike the most popular packages on CRAN, there’s no unifying theme to the functions included, except that they make my life easier. There are some simple functions, like sem that computes standard error of the mean, and col2num, which facilities use of some openxlsx functions and allows users to call columns by letter index rather than by number.</description>
+    </item>
+    
+    <item>
       <title>PowerShell Profile &amp; Functions</title>
       <link>/post/powershell-profile/</link>
       <pubDate>Thu, 12 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/powershell-profile/</guid>
-      <description>Until starting my current position, I had been a pretty strict Mac OS user. As one can expect from a job in the public sector however, I quickly had to face the reality of full-time Windows use, which I had successfully avoided since my days as a high school student with a laptop that barely ran Vista. While initially hesitant, I’ve become gradually more accustomed to and fond of the Windows environment – even running Windows 10 as the primary operating system on my desktop at home.</description>
-    </item>
-    
-    <item>
-      <title>opelR R Package</title>
-      <link>/post/opelr-r-package/</link>
-      <pubDate>Thu, 12 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/opelr-r-package/</guid>
-      <description>Following the advice of the wonderful Hadley Wickham, Hillary Parker, and Karl Broman, I took the plunge last year and drafted the first version of my very own R package. Conveniently, my name fits the motif of R-related puns (useRs, etc.), and so opelR was born!
-Unlike many R packages you’re used to importing into your scripts, there’s no real unifying theme or problem these functions are trying to solve, except to make my life more convenient.</description>
+      <description>For those unfamiliar, the PowerShell profile (Microsoft.Powershell_profile.ps1) is the Windows PowerShell equivalent to the Linux and Mac OS .bashrc file, which loads when the terminal starts and allows user to save functions, aliases, and general shell settings between sessions. How-To Geek has a good article that covers how to set up a basic PowerShell profile, which I recommend reading before moving forward. All the code below can go in your PS Profile in any order, but I’ll present it in the order that makes the most sense to me.</description>
     </item>
     
   </channel>

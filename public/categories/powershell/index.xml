@@ -17,7 +17,7 @@
       <pubDate>Thu, 12 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/powershell-profile/</guid>
-      <description>Until starting my current position, I had been a pretty strict Mac OS user. As one can expect from a job in the public sector however, I quickly had to face the reality of full-time Windows use, which I had successfully avoided since my days as a high school student with a laptop that barely ran Vista. While initially hesitant, I’ve become gradually more accustomed to and fond of the Windows environment – even running Windows 10 as the primary operating system on my desktop at home.</description>
+      <description>For those unfamiliar, the PowerShell profile (Microsoft.Powershell_profile.ps1) is the Windows PowerShell equivalent to the Linux and Mac OS .bashrc file, which loads when the terminal starts and allows user to save functions, aliases, and general shell settings between sessions. How-To Geek has a good article that covers how to set up a basic PowerShell profile, which I recommend reading before moving forward. All the code below can go in your PS Profile in any order, but I’ll present it in the order that makes the most sense to me.</description>
     </item>
     
   </channel>
