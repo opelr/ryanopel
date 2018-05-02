@@ -2,5 +2,4 @@
 ## blogdown::install_theme("htr3n/hyde-hyde", theme_example = TRUE, update_config = TRUE)
 
 blogdown::new_post(title='TITLE')
-
 blogdown::serve_site()
