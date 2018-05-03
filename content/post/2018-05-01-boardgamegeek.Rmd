@@ -126,7 +126,7 @@ Finally in this section, I wanted to quickly see how frequently mechanics are fe
 plot(results$plots$Mechanic_Frequency)
 ```
 
-## Rumors & Crowdfunding
+## Rumors & Crowdfunding 
 
 Reddit, BGG, and other online board game communities are a wonderful place to learn about the public perception of games and trends that exist within the hobby, and a big topic recently has been the impact of crowdfunding websites, which [538 reports](https://fivethirtyeight.com/features/crowdfunding-is-driving-a-196-million-board-game-renaissance/) is generating millions of dollars each year. [This article from 2015](https://www.bestplay.co/board-games-getting-worse/) makes the claim that "sites like Kickstarter and IndieGoGo are mainly responsible for the surge in (questionable quality) board game releases", though I find this claim dubious at best.
 
