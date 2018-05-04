@@ -1,7 +1,7 @@
 ---
 title: A Look into BoardGameGeek
 author: ~
-date: "2018-05-01"
+date: "2018-05-03"
 slug: boardgame-analysis
 categories: [R]
 output:
@@ -15,15 +15,15 @@ library(tidyverse)
 library(magrittr)
 library(reshape2)
 library(randomForest)
-library(treemap)
+library(igraph)
 library(tsne)
-library(highcharter)
 library(plotly)
+library(widgetframe)
 ```
 
-Much has been said about this topic, but if you haven't heard, board games are cool again[^1] -- so popular, in fact,  that we have a dedicated tabletop games store just two blocks from our house in Portland! It's not just physical spaces that have been impacted by this wave of popularity -- virtual board game communities are *ballooning*. Reddit's [r/boardgames](https://reddit.com/r/boardgames/) board boasts nearly 600,000 subscribers and is the 157th largest community on the website at the time of writing, and videos from Wil Wheaton's [YouTube series Tabletop](https://www.youtube.com/playlist?list=PL7atuZxmT956cWFGxqSyRdn6GWhBxiAwE) regularly receive over 500,000 views. However, the undisputed, dominant force of online board gaming communities is [BoardGameGeek (BGG)](https://boardgamegeek.com), which has been around since 2000, recieves over 4,000,000 unique visitors per month as of late 2016, and has extensive data on nearly 100,000 tabletop games.
+*Code for <a href="https://github.com/opelr/ryanopel/blob/master/content/post/2018-05-01-boardgamegeek.Rmd" target="blank">this post</a> and <a href="https://github.com/opelr/boardgames/blob/master/boardgames/01_analysis.R" target="blank">the analysis</a> can be found here.*
 
-However, this post isn't about the board game renaissance, tabletop gaming's recent rise in popularity, or the scope of online communities. Instead, we will be diving into the top 10,000 highest-rated games on BGG, looking for patterns to help us answer questions and dispel myths popularized by the previously mentioned communities. To analyze this data, I wrote a webscraper that interfaces with [BGG's XML API 2](https://boardgamegeek.com/wiki/page/BGG_XML_API2/), the [code for which is here](https://github.com/opelr/boardgames/tree/master/boardgames)[^2].
+Breaking news: board games are cool again[^1] -- so popular, in fact, that we have a dedicated tabletop games store just two blocks from our house in Portland! The undisputed online bastion of this hobby is [BoardGameGeek (BGG)](https://boardgamegeek.com), which has been around since 2000, receives over 4,000,000 unique visitors per month (as of late 2016), and has extensive data on nearly 100,000 tabletop games. By analyzing BGG data from the top 10,000 highest-rated games on the website, we can answer questions and dispel myths popularized within the hobby. To analyze this data, I wrote a web-scraper that interfaces with [BGG's XML API 2](https://boardgamegeek.com/wiki/page/BGG_XML_API2/), the [code for which can be found here](https://github.com/opelr/boardgames/tree/master/boardgames)[^2].
 
 [^1]: I didn't want to harp on this too much -- it seems that every blogger who writes about board games for readers not steeped in the hobby finds it necessary to reiterate that we're in a "board game renaissance". If you're interested in reading more, here's some literature from  [Vice](https://www.vice.com/en_us/article/rise-of-board-games), [The Guardian](https://www.theguardian.com/technology/2016/sep/25/board-games-back-tabletop-gaming-boom-pandemic-flash-point), and [Boston Globe](https://www.bostonglobe.com/ideas/2012/03/11/inside-board-game-renaissance/XXRfS0Ble3X9BGgrZlA7wO/story.html), who was informing us of this trend back in 2012.
 
@@ -34,7 +34,7 @@ However, this post isn't about the board game renaissance, tabletop gaming's rec
 There were a few areas of interest I wanted to address within this dataset. My goals were to:
 
 1. Explore variables and their relationships within the context of BGG (e.g. how are Rank[^3] and Rating[^4] associated?);
-2. Address rumors circling around crowdfunded games; and,
+2. Address rumors surrounding crowdfunded games; and,
 3. Analyze the proximity of games based on objective, BGG-provided data[^5].
 
 [^3]: Rank: A games position from 1 -- 10,000.
@@ -57,7 +57,7 @@ plot(results$plots$Rating_v_Rank)
 I assumed there would be a mostly linear relationship between rank and rating (i.e. the top rated games would be the highest rated), however, this was absolutely not the case. Instead, we see a quadratic relationship emerge. 
 There are numerous factors that may be contributing to the rank-rating disparity, which I will be exploring later in this discussion. Furthermore, crowdfunded games appear to be evenly dispersed throughout the distribution.
 
-Next, I was curious which variables were the most salient predictors of high rank and high rating, which I accomplished using a Random Forest. I exluded publishers, as popular games are likely to have numerous publishers worldwide, and other measures of popularity, including the number of users who want to buy a game.
+Next, I was curious which variables were the most salient predictors of high rank and high rating, which I accomplished using a Random Forest. I excluded publishers, as popular games are likely to have numerous publishers worldwide, and other measures of popularity, including the number of users who want to buy a game.
 
 ```{r randForest, echo=F}
 rating_imp <- randomForest::importance(results$rf$rating_rf) %>%
@@ -118,12 +118,23 @@ plot(results$plots$Year_v_Rank_Density)
 
 This image illustrates that a majority of games in the Top 100, generally considered modern classics, were published between 2005 and 2015. Part of this is certainly due to recency effects -- I imagine games from the last few years are not quite out of their honeymoon phase, though as time goes on we'll see if recent years remain as consistent.
 
-#### Frequency of Game Mechanics
+### Game Mechanics
 
-Finally in this section, I wanted to quickly see how frequently mechanics are featured in the Top 10,000 games. It appears that mechanics related to cards, dice, and player movement are featured in a majority of these titles.
+Here, we see how games mechanics are distributed in the Top 10,000 games. It appears that mechanics related to card collect & management, player movement, and, of course, dice are featured in a majority of these titles.
 
 ```{r, echo = F, fig.height=7}
 plot(results$plots$Mechanic_Frequency)
+```
+
+We can also visualize how frequently these mechanics co-occur. In this image, mechanics are grouped by the rough parent category I ascribed to them, as plotting all the relationships results in a thick spider-web.
+
+```{r, echo = F}
+plot(results$plots$Mechanic_Network, edge.width	= E(results$plots$Mechanic_Network)$weight,
+     vertex.shape="none",
+     edge.color = "gray60",
+     vertex.label.font=2, vertex.label.color="gray20",
+     vertex.label.cex=1,
+     layout = layout_in_circle, main = "Mechanic Co-Occurrence Network")
 ```
 
 ## Rumors & Crowdfunding 
@@ -132,7 +143,7 @@ Reddit, BGG, and other online board game communities are a wonderful place to le
 
 While my personal experiences with crowdfunding campaigns have been mixed, I think that all Kickstarter games need at least *some* interesting or unique properties to ensure successful funding. Moreover, if anything has caused board game quality to decrease (which I disagree with anyways), I'd argue that it's a product of the hobby's popularity more so than crowdfunding. Similar parallels can be observed in indie video games -- with increased success and praise for a niche community, hopeful developers with access to Unity began flooding Steam with mediocre pixel art games. Early Access, the closest parallel to crowdfunding in this medium, bears less of the blame, and I believe the same mentality applies to board gaming. Again, this doesn't mean indie or board games have gotten generally worse, quite the opposite in fact, but I understand that filtering out below-average titles can be frustrating and time-consuming.
 
-Anyways, what does crowdfunding's influence on the top 10,000 BGG games look like?
+Anyways, what does crowd-funding's influence on the top 10,000 BGG games look like?
 
 First, crowdfunded games have significantly higher ratings than their traditionally funded, equally-weighted counterparts -- implying that the quality (or the community's perception) of crowdfunded games is actually somewhat higher than traditionally funded games. However, rampant fanaticism and the sunk-cost fallacy are surely at play here too, so we should not over-interpret this finding.
 
@@ -166,40 +177,37 @@ results$models$mv %>%
   knitr::kable(.)
 ```
 
-Our model indicates that crowdfunding status, year of publication, and average weight all significatly effect the average rating.
+Our model indicates that crowdfunding status, year of publication, and average weight all significantly effect the average rating.
 
-Within the Top 10,000, crowdfunded games appear to be steadily increasing their marketshare and are performing on-par with traditionally-funded games. Moreover, the Average Rating of games is steadily increasing each year -- crowdfunding is not making the enormous negative impact some claim, at least in our sample of above-average titles. Three of the top ten ranked games on BGG (and all three top rated games) are crowdfunded, and I imagine the quality of crowdfunded titles within the upper ranks of the website will only continue to increase.
+Within the Top 10,000, crowdfunded games appear to be steadily increasing their market-share and are performing on-par with traditionally-funded games. Moreover, the Average Rating of games is steadily increasing each year -- crowdfunding is not making the enormous negative impact some claim, at least in our sample of above-average titles. Three of the top ten ranked games on BGG (and all three top rated games) are crowdfunded, and I imagine the quality of crowdfunded titles within the upper ranks of the website will only continue to increase.
 
-It's worth reiterating that this dataset is biased towards at least "Mediocre" games, and that other factors besides how well a game plays certainly influence customers and their ratings. KickStarter games have a tendency to be beautiful, component-rich, and expensive products, and are notorious for their lengthy design/distribution cycles that seem to be pock-marked with endless delays. It's no mystery why games that make it out of development hell are so lauded by their fans, but by constraining the dataset as I have we may be missing out on the other side of the story. To conclude my thoughts on Kickstarter's influence in the board game scene -- customers should buy what they like and fans shouldn't worry about the "state of the hobby" too much.
+It's worth reiterating that this dataset is biased towards at least "Mediocre" games, and that other factors besides how well a game plays certainly influence customers and their ratings. KickStarter games have a tendency to be beautiful, component-rich, and expensive products, and are notorious for their lengthy design/distribution cycles that seem to be pock-marked with endless delays. It's no mystery why games that make it out of development hell are so lauded by their fans, but by constraining the dataset as I have we may be missing out on the other side of the story. To conclude my thoughts on KickStarter's influence in the board game scene -- customers should buy what they like and fans shouldn't worry about the "state of the hobby" too much.
 
-```{r, eval = F, echo = F}
-# ## Game Proximity
-# 
-# In this final section, I wanted to use BoardGameGeek's parameters to determine game proximity and create a recommendation engine based on this metric. I used the [t-Distributed Stochastic Neighbor Embedding (t-SNE)](https://lvdmaaten.github.io/tsne/) algorithm because of its ability to work with "high-dimensional datasets", which ours certainly is. I chose not to include Rating or Rank variable to avoid favoritism[^7], instead wanting to focus on grouping and recommending games that share similar mechanics, themes, and play-styles.
-# 
-# [^7]: There are still a few popularity measures included however, including the number of users who Own, Want, and have the game available for trade. I thought this might help to group older and newer games in a helpful way, which I ultimately believe succeeded.
-# 
-# ```{r, eval=F, echo=F}
-# TSNE1 <- boardgames %>%
-#   select(., Year, Avg_Weight, BGG_Min_Age, BGG_Num_Players,
-#          Play_Time, Num_Owned, Num_Trading, Num_Wanting, Num_Wishing,
-#          one_of(mechanics), one_of(categories), Crowdfunded) %>%
-#   sapply(., function(x) as.numeric(x)) %>%
-#   tsne::tsne(., perplexity = 50)
-# 
-# boardgames %<>%
-#   mutate(TSNE1_x = TSNE1[,1]) %>%
-#   mutate(TSNE1_y = TSNE1[,2])
-# ```
-# 
-# ```{r tsne_plot, message=F, warning=F, echo=F, fig.width=6, fig.height=4, eval=F}
-# tsne_plot <- ggplotly(results$plots$TSNE_Plot,
-#                       tooltip = c("Name", "Avg_Rating", "Crowdfunded"),
-#                       width = 6, height = 4)
-# htmlwidgets::saveWidget(tsne_plot, file = "tsne_plot.html", selfcontained = FALSE)
-# ```
-# 
-# [Here you can find am interactive visualization](../data/boardgame_data/tsne_plot/index.html) of this grouping, and I'm really pleased with the clustering. Games that I mentally group together are closely associated: Abstracts (Hive, Patchwork, Santorini), "gateway games" (Dominion, 7 Wonders, Catan, TTR, etc.), and component-dense Kickstarter stars (Kingdom Death and Gloomhaven), among many others. Additionally, I'm glad that the highly rated games are interspersed with lower rated titles.
+## Game Proximity
+
+In this final section, I wanted to use BoardGameGeek's parameters to determine game proximity and create a recommendation engine based on this metric. I used the [t-Distributed Stochastic Neighbor Embedding (t-SNE)](https://lvdmaaten.github.io/tsne/) algorithm because of its ability to work with "high-dimensional datasets", which ours certainly is. I chose not to include Rating or Rank variable to avoid favoritism[^7], instead wanting to focus on grouping and recommending games that share similar mechanics, themes, and play-styles.
+
+[^7]: There are still a few popularity measures included however, including the number of users who Own, Want, and have the game available for trade. I thought this might help to group older and newer games in a helpful way, which I ultimately believe succeeded.
+
+```{r, eval=F, echo=F}
+TSNE1 <- boardgames %>%
+  select(., Year, Avg_Weight, BGG_Min_Age, BGG_Num_Players,
+         Play_Time, Num_Owned, Num_Trading, Num_Wanting, Num_Wishing,
+         one_of(mechanics), one_of(categories), Crowdfunded) %>%
+  sapply(., function(x) as.numeric(x)) %>%
+  tsne::tsne(., perplexity = 50)
+
+boardgames %<>%
+  mutate(TSNE1_x = TSNE1[,1]) %>%
+  mutate(TSNE1_y = TSNE1[,2])
 ```
 
+```{r tsne_plot, message=F, warning=F, echo=F, eval=T}
+tsne_plot <- ggplotly(results$plots$TSNE_Plot,
+                      tooltip = c("Name", "Avg_Rating", "Crowdfunded"),
+                      width = 6, height = 4)
 
+frameWidget(tsne_plot, height = "500", width = "700")
+```
+
+An interactive visualization of this grouping is displayed above, and I'm pleased with the clustering. Games that I mentally group together are closely associated: Abstracts (Hive, Patchwork, Santorini), "gateway games" (Dominion, 7 Wonders, Catan, TTR, etc.), and component-dense Kickstarter stars (Kingdom Death and Gloomhaven), among many others. Additionally, I'm glad that the highly rated games are interspersed with lower rated titles.
